@@ -1,6 +1,3 @@
-import re
-
-
 with open("day4input1.txt") as file:
     cards = list(map(lambda x: {"split_numbers": x.strip().split(":")[1].split(" |"), "copies": 1}, file))
 

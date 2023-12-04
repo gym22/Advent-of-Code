@@ -1,6 +1,3 @@
-import re
-
-
 with open("day4input1.txt") as file:
     lines = [line.strip() for line in file]
 
@@ -16,7 +13,7 @@ for line in lines:
     my_numbers = {my_numbers_strnig[start:start+3] for start in range(0, len(my_numbers_strnig), 3)}
     wins = winning_numbers & my_numbers
 
-    if (len(wins) == 0):
+    if len(wins) == 0:
         points = 0
     else:
         points = 1
