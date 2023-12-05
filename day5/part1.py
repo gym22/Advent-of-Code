@@ -1,26 +1,48 @@
 import re
 
-with open("day4input1.txt") as file:
-    cards = [{"numbers": x.strip().split(":")[1], "copies": 1} for x in file]
 
-all_points = []
-card_copies = {}
+def load_seeds():
+    seedline = file.readline()
+    seeds = [{"id": int(x)} for x in seedline.split(": ")[1].split()]
+    _ = file.readline()
+    return seeds
 
-for card_no, card in enumerate(cards):
-    copies_of_this_card = card["copies"]
-    winning_numbers_string, my_numbers_string = card["numbers"].split(" |")
 
-    winning_numbers = set(re.findall(r"(\d+)", winning_numbers_string))
-    my_numbers = set(re.findall(r"(\d+)", my_numbers_string))
+def load_maps():
+    maps = {}
+    currentmap = ""
+    for line in file:
+        mapline = line.strip()
 
-    wins = winning_numbers & my_numbers
+        if re.search(r":", mapline) is not None:
+            currentmap = mapline.split(":")[0]
+            maps[currentmap] = []
+        elif mapline != "":
+            maps[currentmap].append(
+                dict(dst=int(mapline.split(" ")[0]), src=int(mapline.split(" ")[1]), lng=int(mapline.split(" ")[2])))
+    return maps
 
-    number_of_next_cards = len(wins)
 
-    print(copies_of_this_card, number_of_next_cards, wins)
-    for next_card in cards[card_no + 1:card_no + 1 + number_of_next_cards]:
-        next_card["copies"] += copies_of_this_card
+with open("input.txt") as file:
+    seeds = load_seeds()
+    maps = load_maps()
 
-print(sum(c["copies"] for c in cards))
+for seed in seeds:
+    seed['nextid'] = seed['id']
+    for mapentry in maps:
+        for mapvalues in maps[mapentry]:
+            # print(mapvalues)
+            if mapvalues["src"] <= seed["nextid"] < mapvalues["src"] + mapvalues["lng"]:
+                # print("using this map:", mapvalues, seed["nextid"] < mapvalues["src"] + mapvalues["lng"])
+                seed[mapentry] = mapvalues["dst"] + seed["nextid"] - mapvalues["src"]
+                seed["nextid"] = mapvalues["dst"] + seed["nextid"] - mapvalues["src"]
+                break
+        if mapentry not in seed:
+            seed[mapentry] = seed["nextid"]
+            # seed["nextid"] stays the same
+        print(seed)
 
-# 6227972
+# print(seeds)
+# print(maps)
+
+print(min([x['nextid'] for x in seeds]))
