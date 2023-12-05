@@ -7,7 +7,7 @@ def has_symbol(fragment):
     return False
 
 
-with open("day3input1.txt") as file:
+with open("input.txt") as file:
     lines = [line.strip() for line in file]
 
 all_part_numbers = []

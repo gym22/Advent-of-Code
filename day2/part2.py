@@ -20,12 +20,10 @@ def is_game_possible(input_line):
 
 
 total_sum = 0
-with open('day2input1.txt', 'r') as file:
+with open('input.txt', 'r') as file:
     for line in file:
         num = is_game_possible(line.strip())
         print(num)
         total_sum += num
 
 print(f"Total Sum: {total_sum}")
-
-# 54911

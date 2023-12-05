@@ -29,12 +29,10 @@ def find_digit(input_line):
 
 
 total_sum = 0
-with open('day1input1.txt', 'r') as file:
+with open('input.txt', 'r') as file:
     for line in file:
         num = find_digit(line)
         print(num)
         total_sum += num
 
 print(f"Total Sum: {total_sum}")
-
-# 54591

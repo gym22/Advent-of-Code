@@ -1,4 +1,4 @@
-with open("day4input1.txt") as file:
+with open("input.txt") as file:
     lines = [line.strip() for line in file]
 
 all_points = []
@@ -20,5 +20,3 @@ for line in lines:
     print(wins, points)
 
 print(sum(all_points))
-
-# 26426

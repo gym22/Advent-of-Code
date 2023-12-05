@@ -25,12 +25,10 @@ def is_game_possible(input_line, test_cubes):
 
 
 total_sum = 0
-with open('day2input1.txt', 'r') as file:
+with open('input.txt', 'r') as file:
     for line in file:
         num = is_game_possible(line.strip(), {"red": 12, "green": 13, "blue": 14})
         print(num)
         total_sum += num
 
 print(f"Total Sum: {total_sum}")
-
-# 2476

@@ -1,6 +1,6 @@
 import re
 
-with open("day4input1.txt") as file:
+with open("input.txt") as file:
     cards = [{"numbers": x.strip().split(":")[1], "copies": 1} for x in file]
 
 all_points = []
@@ -22,5 +22,3 @@ for card_no, card in enumerate(cards):
         next_card["copies"] += copies_of_this_card
 
 print(sum(c["copies"] for c in cards))
-
-# 6227972

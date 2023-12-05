@@ -8,7 +8,7 @@ def find_gears(fragment, fragment_line, fragment_start, gear_id):
         print({"line": fragment_line, "pos": gear.start() + fragment_start, "gear": int(gear_id)})
 
 
-with open("day3input1.txt") as file:
+with open("input.txt") as file:
     lines = [line.strip() for line in file]
 
 all_gear_ratios = []
@@ -44,5 +44,3 @@ for gear1 in all_gears:
             all_gear_ratios.append(gear1['gear'] * gear2['gear'])
 
 print(sum(all_gear_ratios)/2)
-
-# 80703636
