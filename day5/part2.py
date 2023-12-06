@@ -6,7 +6,7 @@ def load_seeds():
     seediterator = re.finditer(r"(\d+) (\d+)", seedline)
     seeds = []
     for s in seediterator:
-        seeds.append({"id": int(int(s.group(1))), "range": int(int(s.group(2)))})
+        seeds.append({"start": int(int(s.group(1))), "end": int(int(s.group(2))) + int(int(s.group(1))) - 1})
     _ = file.readline()
     return seeds
 
@@ -22,7 +22,8 @@ def load_maps():
             maps[currentmap] = []
         elif mapline != "":
             maps[currentmap].append(
-                dict(dst=int(mapline.split(" ")[0]), src=int(mapline.split(" ")[1]), lng=int(mapline.split(" ")[2])))
+                {'dst': int(mapline.split(" ")[0]), 'start': int(mapline.split(" ")[1]),
+                 'end': (int(mapline.split(" ")[2]) + int(mapline.split(" ")[1])) - 1})
     return maps
 
 
@@ -30,26 +31,42 @@ with open("input.txt") as file:
     seeds = load_seeds()
     maps = load_maps()
 
-for seed in seeds:
-    for nextid in range(seed['id'], seed['id'] + seed['range']):
-        seed['nextid'] = nextid
-        for mapentry in maps:
-            for mapvalues in maps[mapentry]:
-                #print(mapvalues)
-                if mapvalues["src"] <= seed["nextid"] < mapvalues["src"] + mapvalues["lng"]:
-                    #print("using this map:", mapvalues, seed["nextid"] < mapvalues["src"] + mapvalues["lng"])
-                    seed[mapentry] = mapvalues["dst"] + seed["nextid"] - mapvalues["src"]
-                    seed["nextid"] = mapvalues["dst"] + seed["nextid"] - mapvalues["src"]
-                    break
-            if mapentry not in seed:
-                    seed[mapentry] = seed["nextid"]
-                    # seed["nextid"] stays the same
-        #print(seed)
-        if ("lowestid" not in seed or seed["nextid"] < seed["lowestid"]):
-            seed["lowestid"] = seed["nextid"]
 
-#print(seeds)
-#print(maps)
+for mapentry in maps:
+    dst = []
+    while len(seeds) > 0:
+        seed = seeds.pop()
+        seedstart = seed["start"]
+        seedend = seed["end"]
+#        print("seed", seed)
 
-print(min([x['lowestid'] for x in seeds]))
-# 6227972
+        found = False
+        for mapvalues in maps[mapentry]:
+#            print(mapentry, mapvalues)
+            rangestart = mapvalues["start"]
+            rangeend = mapvalues["end"]
+
+            if rangestart <= seedend and rangeend >= seedstart:
+                nextstart = mapvalues["dst"] + seedstart - rangestart
+                nextend = nextstart + seed["end"] - seed["start"]
+                if seedstart < rangestart:  # shorten start and split
+                    seeds.append({"start": seedstart, "end": rangestart - 1})
+                    nextstart += rangestart - seedstart
+
+                if seedend > rangeend:  # shorten end and split
+                    seeds.append({"start": rangeend + 1, "end": seedend})
+                    nextend -= seedend - rangeend
+                dst.append({"start": nextstart, "end": nextend})
+                found = True
+                break
+        if not found:
+            dst.append({"start": seed["start"], "end": seed["end"]})
+    print(mapentry, len(dst))
+#        print(nextstart, seeds, dst)
+    seeds = dst
+
+
+# print(seeds)
+# print(maps)
+
+print(min([x['start'] for x in seeds]))
