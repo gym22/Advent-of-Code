@@ -16,7 +16,7 @@ while location != finallocation:
     instructions.append(instruction)
 
     location = maps[location][instruction]
-    print(location, instruction)
+#    print(location, instruction)
     steps += 1
 
 print(steps)
