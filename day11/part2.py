@@ -38,15 +38,17 @@ def draw_line(y1, x1, y2, x2):
     dx = x2 - x1
     dy = y2 - y1
 
-    for x in range(x1,x2+1):
-        if x in gapx:
-            dx += expansion - 1
-
-    for y in range(y1,y2+1):
-        if y in gapy:
-            dy += expansion - 1
+    dx = add_gap(dx, x1, x2, gapx)
+    dy = add_gap(dy, y1, y2, gapy)
 
     return dx + dy
+
+
+def add_gap(dx, x1, x2, gap):
+    for x in range(x1, x2 + 1):
+        if x in gap:
+            dx += expansion - 1
+    return dx
 
 
 find_galaxies()
