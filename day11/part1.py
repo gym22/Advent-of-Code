@@ -1,5 +1,3 @@
-import math
-
 universe = []
 cols = None
 galaxies = []
@@ -37,49 +35,11 @@ def find_galaxies():
 def draw_line(y1, x1, y2, x2):
     if x1 > x2:
         x1, x2 = x2, x1
-    if x1 == x2:
-        return y2 - y1
-    if y1 == y2:
-        return x2 - x1
 
     dx = x2 - x1
     dy = y2 - y1
 
-    if dx > dy:
-        return draw_low_slopex(y1, x1, y2, x2)
-    else:
-        return draw_low_slopey(y1, x1, y2, x2)
-
-
-def draw_low_slopex(y1, x1, y2, x2):
-    steps = 0
-    prevy = y1
-    dx = x2 - x1
-    dy = y2 - y1
-
-    for x in range(x1, x2):
-        y = y1 + math.floor(dy * (x - x1) / dx)
-
-        steps += 1
-        if y > prevy:
-            steps += 1
-        prevy = y
-    return steps + 1
-
-
-def draw_low_slopey(y1, x1, y2, x2):
-    steps = 0
-    prevx = x1
-    dx = x2 - x1
-    dy = y2 - y1
-
-    for y in range(y1, y2):
-        x = x1 + math.floor(dx * (y - y1) / dy)
-        steps += 1
-        if x > prevx:
-            steps += 1
-        prevx = x
-    return steps + 1
+    return dx + dy
 
 
 find_galaxies()
