@@ -1,11 +1,11 @@
 universe = []
 cols = None
 galaxies = []
-expansion = 1000  # with 1000x expansion, numbers are large enough to just add zeroes
-expansion2 = 1000000
-
+expansion = 1000000
+gapx = []
+gapy = []
 with open("input.txt") as file:
-    for line in file:
+    for lno, line in enumerate(file):
         row = [1 if p == "#" else 0 for p in list(line.strip())]
         if cols is not None:
             cols = map(lambda x, y: x + y, cols, row)
@@ -14,19 +14,12 @@ with open("input.txt") as file:
 
         universe.append(row)
         if sum(row) == 0:
-            print("expand row... ")
-            for n in range(1, expansion):
-                universe.append(row.copy())
+            gapy.append(lno)
 
 # expand columns
-n = 0
 for i, col in enumerate(list(cols)):
     if col == 0:
-        print("expand col ", i, i + n)
-        for c in range(1, expansion):
-            n += 1
-            for row in universe:
-                row.insert(i + n, 0)
+        gapx.append(i)
 
 
 def find_galaxies():
@@ -45,6 +38,14 @@ def draw_line(y1, x1, y2, x2):
     dx = x2 - x1
     dy = y2 - y1
 
+    for x in range(x1,x2+1):
+        if x in gapx:
+            dx += expansion - 1
+
+    for y in range(y1,y2+1):
+        if y in gapy:
+            dy += expansion - 1
+
     return dx + dy
 
 
@@ -56,8 +57,7 @@ while len(galaxies) > 0:
     g1 = galaxies.pop(0)
     for g2 in galaxies:
         steps = draw_line(g1["y"], g1["x"], g2["y"], g2["x"])
-        # with 1000x expansion, numbers are large enough to just add zeroes
-        total_steps += steps // expansion * expansion2 + steps % expansion
+        total_steps += steps
         pairs += 1
 
 print("pairs", pairs, "steps", total_steps)
