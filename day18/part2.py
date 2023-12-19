@@ -1,4 +1,4 @@
-instructions = [(x.split(" ")[2][7], int(x.split(" ")[2][2:7], 16)) for x in open('input.txt').read().splitlines()]
+instructions = [(x[-2], int(x[-7:-2], 16)) for x in open('input.txt').read().splitlines()]
 
 movements = {
     "0": (0, 1,),
