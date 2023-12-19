@@ -3,7 +3,7 @@ import re
 
 
 def parse():
-    w, p = open('input.txt').read().split("\n\n")
+    w, _ = open('input.txt').read().split("\n\n")
     for wf in w.split('\n'):
         wfid, instr = wf.split("{")
         wfs[wfid] = instr[:-1].split(",")
@@ -46,8 +46,6 @@ while q:
 
         q.append((nextwf, newranges))
 
-tot = 0
-for r, rting in combinations:
-    tot += math.prod([rting[x][1] - rting[x][0] + 1 for x in list("xmas")])
+tot = sum([math.prod([rting[1][x][1] - rting[1][x][0] + 1 for x in list("xmas")]) for rting in combinations])
 
 print(tot)
