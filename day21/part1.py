@@ -7,9 +7,9 @@ for row, line in enumerate(open('input.txt')):
     garden.append(line)
 
 maxx = len(garden[0]) - 1
-maxy = len(garden[1]) - 1
+maxy = len(garden) - 1
 
-for step in range(65):
+for step in range(64):
     steps = nextsteps.copy()
     nextsteps = set()
     for x, y in steps:
@@ -20,4 +20,4 @@ for step in range(65):
                 continue
             nextsteps.add((nextx, nexty))
 
-print(len(steps))
+print(len(nextsteps))
