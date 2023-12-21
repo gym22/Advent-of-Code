@@ -19,10 +19,20 @@ def find_references():
         modules[con]["state"] = {x: "low" for x in references}
 
 
+def find_interesting_modules():
+    cons = [x for x in modules if modules[x]["type"] == "&"]
+    for con in cons:
+        all_inputs_are_flips = True
+        for ref in modules[con]["state"]:
+            if modules[ref]['type'] == "&":
+                all_inputs_are_flips = False
+        if all_inputs_are_flips:
+            interesting_modules.append(con)
+
+
 def push(n):
     q = [('roadcaster', "low", "button")]
     while q:
-        #       print(list(reversed(q[0])))
         moduleid, pulse, lastmodule = q.pop(0)
 
         if moduleid not in modules:
@@ -50,15 +60,15 @@ def push(n):
             q.append((nextid, newpulse, moduleid))
 
 
-interesting_modules = ['dc', 'qm', 'jh', 'zq'] ## this is not a generic solution but relies on analyying the input and finding the conjuction modules contributing to the output
+interesting_modules = []
 modules = {}
 parse()
 find_references()
-
+find_interesting_modules()
 cycles = {}
 
 n = 1
-while len(cycles) <4 :
+while len(cycles) < 4:
     push(n)
     n += 1
 
